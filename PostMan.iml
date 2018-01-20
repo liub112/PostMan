@@ -15,8 +15,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="jdk" jdkName="JavaSE-1.6" jdkType="JavaSDK" />
-    <orderEntry type="module-library">
+    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
+    <orderEntry type="module-library" exported="">
       <library name="angel-invoke-1.4.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/angel-invoke-1.4.jar!/" />
@@ -25,7 +25,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library name="spring-core-3.1.1.RELEASE.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/spring-core-3.1.1.RELEASE.jar!/" />
@@ -34,7 +34,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library name="sqlitejdbc-0.5.6.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/sqlitejdbc-0.5.6.jar!/" />
