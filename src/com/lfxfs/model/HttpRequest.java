@@ -17,7 +17,7 @@ public class HttpRequest {
 	
 	@Override
 	public String toString() {
-		return "HttpRequest [url=" + url + "],reqDate=" + reqDate + "]" ;
+		return "[" + reqDate + "]"+url;
 	}
 
 	public Long getId() {
