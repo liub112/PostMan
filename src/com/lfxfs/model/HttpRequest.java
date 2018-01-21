@@ -1,6 +1,7 @@
 package com.lfxfs.model;
 
 public class HttpRequest {
+	private Long id;
 	
 	private String url;
 	
@@ -18,6 +19,16 @@ public class HttpRequest {
 	public String toString() {
 		return "HttpRequest [url=" + url + "],reqDate=" + reqDate + "]" ;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
 
 	public String getReqDate() {
 		return reqDate;
@@ -59,9 +70,10 @@ public class HttpRequest {
 		this.rspText = rspText;
 	}
 
-	public HttpRequest(String url, String httpHeader, String reqText,
+	public HttpRequest(Long id,String url, String httpHeader, String reqText,
 			String rspText,String date) {
 		super();
+		this.id=id;
 		this.url = url;
 		this.httpHeader = httpHeader;
 		this.reqText = reqText;
@@ -71,7 +83,6 @@ public class HttpRequest {
 
 	public HttpRequest() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	
