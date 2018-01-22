@@ -119,7 +119,10 @@ public class AppView extends JFrame {
 		textArea_reqText.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		textArea_reqText.setWrapStyleWord(true);
 		textArea_reqText.setLineWrap(true);
-		contentPane.add(textArea_reqText);
+		JScrollPane scrollPane_req = new JScrollPane();
+		scrollPane_req.setBounds(305, 59, 537, 144);
+		scrollPane_req.setViewportView(textArea_reqText);
+		contentPane.add(scrollPane_req);
 		
 		JLabel lblNewLabel_4 = new JLabel("返回内容");
 		lblNewLabel_4.setBounds(211, 221, 72, 15);
@@ -129,7 +132,10 @@ public class AppView extends JFrame {
 		textArea_rspText.setBounds(305, 218, 537, 345);
 		textArea_rspText.setLineWrap(true);
 		textArea_rspText.setBorder(new LineBorder(Color.LIGHT_GRAY));
-		contentPane.add(textArea_rspText);
+		JScrollPane scrollPane_rsp = new JScrollPane();
+		scrollPane_rsp.setBounds(305, 218, 537, 345);
+		scrollPane_rsp.setViewportView(textArea_rspText);
+		contentPane.add(scrollPane_rsp);
 		
 		btnNewButton_1.addActionListener(new ActionListener() {
 
