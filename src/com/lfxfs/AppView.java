@@ -2,6 +2,7 @@ package com.lfxfs;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,6 +11,9 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 import java.awt.GridBagLayout;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -28,9 +32,11 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -38,12 +44,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-
-import org.springframework.util.StringUtils;
-
 import com.al.angel.invoke.http.HttpInvoke;
 import com.al.angel.invoke.http.HttpResponse;
-import com.lfxfs.compents.HttpHistoryDialog;
+import com.lfxfs.compents.HistoryDialog;
 import com.lfxfs.compents.HttpKeepDialog;
 import com.lfxfs.dao.httpDao;
 import com.lfxfs.model.HttpKeep;
@@ -85,6 +88,20 @@ public class AppView extends JFrame {
 			}
 		});
 	}
+	
+	/** 
+	* 统一设置字体，父界面设置之后，所有由父界面进入的子界面都不需要再次设置字体 
+	*/  
+	private static void InitGlobalFont(Font font) {  
+		FontUIResource fontRes = new FontUIResource(font);  
+		for (Enumeration<Object> keys = UIManager.getDefaults().keys();keys.hasMoreElements(); ) {  
+			Object key = keys.nextElement();  
+			Object value = UIManager.get(key);  
+			if (value instanceof FontUIResource) {  
+				UIManager.put(key, fontRes);  
+			}  
+		} 
+	}
 
 	/**
 	 * Create the frame.
@@ -101,7 +118,7 @@ public class AppView extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		this.setLocationRelativeTo(null);
-		
+		InitGlobalFont(new Font("微软雅黑", Font.PLAIN, 12));
 		JLabel lblNewLabel_1 = new JLabel("请求地址");
 		lblNewLabel_1.setBounds(251, 26, 57, 23);
 		contentPane.add(lblNewLabel_1);
@@ -277,7 +294,7 @@ public class AppView extends JFrame {
 //				HttpHistory history = new HttpHistory(frame);
 //            	history.setVisible(true);
 //            	frame.contentPane.add(history);		
-				HttpHistoryDialog history = new HttpHistoryDialog(frame,true);
+				HistoryDialog history = new HistoryDialog(frame,true);
             	history.setVisible(true);
             	contentPane.add(history);	
 			}
@@ -290,6 +307,16 @@ public class AppView extends JFrame {
 	 	popMenu.add(historyItem);
 	 	popMenu.add(delItem);
 		tree.setCellEditor(new DefaultTreeCellEditor(tree,new DefaultTreeCellRenderer()));
+		DefaultTreeCellRenderer render=(DefaultTreeCellRenderer)(tree.getCellRenderer());
+		//叶节点的图标，也就是下面没有子结点的节点图标
+		Icon leafIcon=new ImageIcon("img/url.png");
+		//非叶节点关闭时的图标，也就是下面有子结点的节点图标
+		Icon closedIcon=new ImageIcon("img/文件夹-收起.png");
+		//非叶节点打开时的图标
+		Icon openedIcon=new ImageIcon("img/文件夹-展开.png");
+		render.setLeafIcon(leafIcon);
+		render.setClosedIcon(closedIcon);
+		render.setOpenIcon(openedIcon);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(31, 32, 185, 577);
