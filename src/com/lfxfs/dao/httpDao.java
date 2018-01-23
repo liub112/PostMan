@@ -41,6 +41,7 @@ public class httpDao {
 			prtm.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}finally{
 			DbUtil.closeConnection(conn);
 		}

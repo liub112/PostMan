@@ -32,7 +32,6 @@ import java.util.Vector;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.TreeSelectionEvent;
@@ -371,7 +370,7 @@ public class AppView extends JFrame {
 		
 		JRadioButton radioButton = new JRadioButton("关闭");
 		radioButton.setBounds(157, 3, 72, 23);
-		radioButton.addActionListener(new ActionListener() {			
+		radioButton.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setTimeOut = false;
