@@ -74,7 +74,7 @@ public class HistoryDialog extends javax.swing.JDialog {
 		table_1.setModel(new javax.swing.table.DefaultTableModel(
 				new Object[][] { { null, null, null }, { null, null, null },
 						{ null, null, null }, { null, null, null } },
-				new String[] { "耗时[ms]", "请求地址", "请求时间" }){
+				new String[] {"耗时[ms]", "请求地址", "请求时间" }){
 			boolean[] canEdit = new boolean[] { false, false, false };
 
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -83,16 +83,16 @@ public class HistoryDialog extends javax.swing.JDialog {
 		
 		});
 		TableColumn firsetColumn = table_1.getColumnModel().getColumn(0);
-		firsetColumn.setPreferredWidth(50);
-		firsetColumn.setMaxWidth(50);
-		firsetColumn.setMinWidth(50);
+		firsetColumn.setPreferredWidth(60);
+		firsetColumn.setMaxWidth(60);
+		firsetColumn.setMinWidth(60);
 		TableColumn twoColumn = table_1.getColumnModel().getColumn(1);
 		twoColumn.setPreferredWidth(50);
-		twoColumn.setMaxWidth(500);
+		twoColumn.setMaxWidth(520);
 		twoColumn.setMinWidth(50);
 		TableColumn threeColumn = table_1.getColumnModel().getColumn(2);
 		threeColumn.setPreferredWidth(50);
-		threeColumn.setMaxWidth(137);
+		threeColumn.setMaxWidth(107);
 		threeColumn.setMinWidth(50);
 		table_1.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
