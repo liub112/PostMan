@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BoxLayout;
@@ -18,6 +19,7 @@ import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Insets;
 import java.awt.PopupMenu;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -41,7 +43,8 @@ import org.springframework.util.StringUtils;
 
 import com.al.angel.invoke.http.HttpInvoke;
 import com.al.angel.invoke.http.HttpResponse;
-import com.lfxfs.compents.HttpKeepAdd;
+import com.lfxfs.compents.HttpHistoryDialog;
+import com.lfxfs.compents.HttpKeepDialog;
 import com.lfxfs.dao.httpDao;
 import com.lfxfs.model.HttpKeep;
 import com.lfxfs.model.HttpRequest;
@@ -57,11 +60,11 @@ public class AppView extends JFrame {
 	private static final String ENCODING = "UTF-8";
 
 	private JPanel contentPane;
-	private JTextField textField_url;
+	public JTextField textField_url;
 	private final AppView frame;
 	private final httpDao httpDao;
-	private final  JTextArea textArea_reqText ; 
-	private final  JTextArea textArea_rspText ;
+	public final  JTextArea textArea_reqText ; 
+	public final  JTextArea textArea_rspText ;
 	private final DefaultTreeModel dt;
 	private DefaultMutableTreeNode top;
 	public  final JTree tree;
@@ -89,8 +92,9 @@ public class AppView extends JFrame {
 	public AppView() {
 		frame = this;
 		httpDao = new httpDao();
+		setTitle("POST-工具v2.0 --by lfxfs");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 949, 658);
+		setBounds(100, 100, 1087, 658);
 		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -98,12 +102,12 @@ public class AppView extends JFrame {
 		contentPane.setLayout(null);
 		this.setLocationRelativeTo(null);
 		
-		JLabel lblNewLabel_1 = new JLabel("地址");
-		lblNewLabel_1.setBounds(211, 26, 57, 23);
+		JLabel lblNewLabel_1 = new JLabel("请求地址");
+		lblNewLabel_1.setBounds(251, 26, 57, 23);
 		contentPane.add(lblNewLabel_1);
 		
 		textField_url = new JTextField();
-		textField_url.setBounds(305, 26, 537, 23);
+		textField_url.setBounds(374, 26, 537, 23);
 		contentPane.add(textField_url);
 		textField_url.setColumns(10);
 		
@@ -111,21 +115,20 @@ public class AppView extends JFrame {
 		
 		
 		JLabel lblNewLabel_3 = new JLabel("请求内容");
-		lblNewLabel_3.setBounds(211, 54, 72, 15);
+		lblNewLabel_3.setBounds(251, 63, 72, 15);
 		contentPane.add(lblNewLabel_3);
+		JScrollPane scrollPane_req = new JScrollPane();
+		scrollPane_req.setBounds(374, 59, 537, 144);
+		contentPane.add(scrollPane_req);
 		
 		textArea_reqText = new JTextArea();
-		textArea_reqText.setBounds(305, 59, 537, 144);
+		scrollPane_req.setViewportView(textArea_reqText);
 		textArea_reqText.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		textArea_reqText.setWrapStyleWord(true);
 		textArea_reqText.setLineWrap(true);
-		JScrollPane scrollPane_req = new JScrollPane();
-		scrollPane_req.setBounds(305, 59, 537, 144);
-		scrollPane_req.setViewportView(textArea_reqText);
-		contentPane.add(scrollPane_req);
 		
 		JLabel lblNewLabel_4 = new JLabel("返回内容");
-		lblNewLabel_4.setBounds(211, 221, 72, 15);
+		lblNewLabel_4.setBounds(251, 235, 72, 15);
 		contentPane.add(lblNewLabel_4);
 		
 		textArea_rspText = new JTextArea();
@@ -133,7 +136,7 @@ public class AppView extends JFrame {
 		textArea_rspText.setLineWrap(true);
 		textArea_rspText.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		JScrollPane scrollPane_rsp = new JScrollPane();
-		scrollPane_rsp.setBounds(305, 218, 537, 345);
+		scrollPane_rsp.setBounds(374, 231, 537, 345);
 		scrollPane_rsp.setViewportView(textArea_rspText);
 		contentPane.add(scrollPane_rsp);
 		
@@ -141,19 +144,21 @@ public class AppView extends JFrame {
 
 			public void actionPerformed(ActionEvent a) {
 				try {
-					frame.textArea_reqText.setLineWrap(true);
-					frame.textArea_rspText.setLineWrap(true);
+					textArea_reqText.setLineWrap(true);
+					textArea_rspText.setLineWrap(true);
 					HttpRequest req = new HttpRequest();
-					String url = frame.textField_url.getText().trim();
-					String reqText = frame.textArea_reqText.getText().trim();
-					
+					String url = textField_url.getText().trim();
+					String reqText = textArea_reqText.getText().trim();
+					Date start = new Date();
 					HttpResponse resp = HttpInvoke.sendRequest(url, null, reqText,
-							3600, frame.ENCODING);
+							3600, ENCODING);
+					Long cost = new Date().getTime()-start.getTime();
 					String respText = resp.getContent().trim();
 					frame.textArea_rspText.setText(respText);
 					req.setUrl(url);
 					req.setReqText(reqText);
 					req.setRspText(respText);
+					req.setCost(cost);
 					httpDao.saveReqInfo(req);
 
 					frame.updateTree(tree);
@@ -164,19 +169,19 @@ public class AppView extends JFrame {
 			
 			}
 		});
-		btnNewButton_1.setBounds(866, 26, 67, 23);
+		btnNewButton_1.setBounds(954, 26, 67, 23);
 		contentPane.add(btnNewButton_1);
 		JButton button = new JButton("收藏");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String httpUrl = frame.textField_url.getText();
-				String reqText = frame.textArea_reqText.getText();
-//				if(!StringUtils.hasLength(httpUrl)){
-//					JOptionPane.showMessageDialog(null, "请求地址为空！");
-//				}
-				HttpKeepAdd httpKeepAdd =new HttpKeepAdd(httpUrl,reqText,frame);
-				httpKeepAdd.setVisible(true);
-				frame.contentPane.add(httpKeepAdd);				
+//				String httpUrl = frame.textField_url.getText();
+//				String reqText = frame.textArea_reqText.getText();
+//				HttpKeepAdd httpKeepAdd =new HttpKeepAdd(httpUrl,reqText,frame);
+//				httpKeepAdd.setVisible(true);
+//				frame.contentPane.add(httpKeepAdd);	
+				HttpKeepDialog httpKeepDialog = new HttpKeepDialog(frame,true);
+				httpKeepDialog.setVisible(true);
+				add(httpKeepDialog);
 			}
 		});
 		button.setBounds(562, 586, 93, 23);
@@ -231,7 +236,7 @@ public class AppView extends JFrame {
 	 	popMenu = new JPopupMenu();
 //	 	JMenuItem addItem;   //各个菜单项
 	 	JMenuItem delItem;
-//	 	JMenuItem editItem;
+	 	JMenuItem historyItem;
 
 //	 	addItem = new JMenuItem("添加");
 //	 	addItem.addActionListener(new  ActionListener(){
@@ -262,25 +267,32 @@ public class AppView extends JFrame {
 			}	 		
 	 	});
 
-//	 	editItem = new JMenuItem("修改");
-//	 	editItem.addActionListener(new  ActionListener(){
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//	 		
-//	 	});
+	 	historyItem = new JMenuItem("History");
+	 	historyItem.addActionListener(new  ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree
+                        .getLastSelectedPathComponent();
+				System.out.println(node.toString());
+//				HttpHistory history = new HttpHistory(frame);
+//            	history.setVisible(true);
+//            	frame.contentPane.add(history);		
+				HttpHistoryDialog history = new HttpHistoryDialog(frame,true);
+            	history.setVisible(true);
+            	contentPane.add(history);	
+			}
+	 		
+	 	});
 
 	 
 
 //	 	popMenu.add(addItem);
+	 	popMenu.add(historyItem);
 	 	popMenu.add(delItem);
-//	 	popMenu.add(editItem);
 		tree.setCellEditor(new DefaultTreeCellEditor(tree,new DefaultTreeCellRenderer()));
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(31, 32, 155, 577);
+		scrollPane.setBounds(31, 32, 185, 577);
 		scrollPane.setViewportView(tree);
 		contentPane.add(scrollPane);
 		// 添加选择事件
@@ -303,7 +315,7 @@ public class AppView extends JFrame {
 	                	frame.textArea_reqText.setText(req.getReqText());
 	                	frame.textArea_rspText.setText(req.getRspText());
 	                    System.out.println("你选择了：" + req.toString());
-		        	}else{
+		        	}else if(object instanceof HttpKeep){
 		        		HttpKeep req = (HttpKeep) object;
 		                frame.textField_url.setText(req.getHttpUrl());
 		                frame.textArea_reqText.setText(req.getReqText());
@@ -366,7 +378,7 @@ public class AppView extends JFrame {
 		                	frame.textArea_reqText.setText(req.getReqText());
 		                	frame.textArea_rspText.setText(req.getRspText());
 		                    System.out.println("你选择了：" + req.toString());
-	                	}else{
+	                	}else if(object instanceof HttpKeep){
 	                		HttpKeep req = (HttpKeep) object;
 		                	frame.textField_url.setText(req.getHttpUrl());
 		                	frame.textArea_reqText.setText(req.getReqText());

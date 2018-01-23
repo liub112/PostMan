@@ -28,7 +28,7 @@ public class httpDao {
 		Connection conn =null;
 		try {			
 			conn = DbUtil.getConnection();
-			String sql ="insert into http_request values(null,?,?,?,?,?)";
+			String sql ="insert into http_request values(null,?,?,?,?,?,?)";
 			createTableIfNotExist(conn);
 			PreparedStatement prtm = conn.prepareStatement(sql);
 			prtm.setString(1, req.getUrl());
@@ -36,6 +36,7 @@ public class httpDao {
 			prtm.setString(3,req.getRspText());
 			prtm.setString(4,req.getHttpHeader());
 			prtm.setTimestamp(5, new Timestamp(new Date().getTime()));
+			prtm.setLong(6, req.getCost());
 			prtm.executeUpdate();
 			prtm.close();
 		} catch (Exception e) {
@@ -54,7 +55,7 @@ public class httpDao {
 		Connection conn =null;
 		try {			
 			conn = DbUtil.getConnection();
-			String sql ="insert into http_keep values(null,?,?,?,?)";
+			String sql ="insert into http_keep values(?,?,?,?)";
 			createTableIfNotExist(conn);
 			PreparedStatement prtm = conn.prepareStatement(sql);
 			prtm.setString(1, req.getHttpName());
@@ -87,12 +88,11 @@ public class httpDao {
 			PreparedStatement prtm = conn.prepareStatement(sql);
 			ResultSet rs = prtm.executeQuery();
 			while(rs.next()){
-				Long id = rs.getLong(1);
-				String httpName=	rs.getString(2);
-				String httpUrl = rs.getString(3);
-				String rspText = rs.getString(4);
-				Timestamp httpDate = rs.getTimestamp(5);	
-				HttpKeep dto = new HttpKeep(id,httpName,httpUrl,rspText);
+				String httpName=	rs.getString(1);
+				String httpUrl = rs.getString(2);
+				String rspText = rs.getString(3);
+				Timestamp httpDate = rs.getTimestamp(4);	
+				HttpKeep dto = new HttpKeep(httpName,httpUrl,rspText);
 				lists.add(dto);
 			}
 			rs.close();
@@ -124,7 +124,8 @@ public class httpDao {
 				String rspText = rs.getString(4);
 				String htttpHeader = rs.getString(5);
 				Timestamp httpDate = rs.getTimestamp(6);	
-				HttpRequest dto = new HttpRequest(id,url,htttpHeader,reqText,rspText,sdf.format(new Date(httpDate.getTime())));
+				Long cost = rs.getLong(7);
+				HttpRequest dto = new HttpRequest(id,url,htttpHeader,reqText,rspText,sdf.format(new Date(httpDate.getTime())),cost);
 				lists.add(dto);
 			}
 			rs.close();
@@ -149,14 +150,14 @@ public class httpDao {
 				  " req_text    VARCHAR (4000),"+
 				  "rsp_text    VARCHAR (4000),"+
 				  " http_header VARCHAR (800),"+
-				  " create_date DATE    DEFAULT sysdate"+
+				  " create_date DATE    DEFAULT sysdate,"+
+				  "cost    DECIMAL(32)"+
 				")";
 				PreparedStatement prtm = conn.prepareStatement(ddl);
 				prtm.executeUpdate();		
 
 				String ddl2 ="CREATE TABLE if not exists http_keep ("+
-						"id integer PRIMARY KEY autoincrement, "+
-						"http_name         VARCHAR (200),"+
+						"http_name   VARCHAR (200) UNIQUE ON CONFLICT REPLACE PRIMARY KEY,"+
 						"http_url         VARCHAR (200),"+
 						" req_text    VARCHAR (4000),"+
 						" create_date DATE    DEFAULT sysdate"+
@@ -172,12 +173,12 @@ public class httpDao {
 	}
 	public void delReqKeepInfo(HttpKeep o) {
 		Connection conn = null;
-		String sql ="delete from http_keep where id=?";
+		String sql ="delete from http_keep where http_name=?";
 		try {
 			conn = DbUtil.getConnection();
 			createTableIfNotExist(conn);
 			PreparedStatement prtm = conn.prepareStatement(sql);
-			prtm.setLong(1, o.getId());
+			prtm.setString(1, o.getHttpName());
 			prtm.executeUpdate();
 			prtm.close();
 		} catch (Exception e) {

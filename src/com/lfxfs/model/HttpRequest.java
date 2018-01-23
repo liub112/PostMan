@@ -12,13 +12,29 @@ public class HttpRequest {
 	private String rspText;
 	
 	private String reqDate;
+	//耗时
+	private Long cost;
 
 	
 	
 	@Override
 	public String toString() {
-		return "[" + reqDate + "]"+url;
+		return url;
 	}
+	
+	
+
+	public Long getCost() {
+		return cost;
+	}
+
+
+
+	public void setCost(Long cost) {
+		this.cost = cost;
+	}
+
+
 
 	public Long getId() {
 		return id;
@@ -71,7 +87,7 @@ public class HttpRequest {
 	}
 
 	public HttpRequest(Long id,String url, String httpHeader, String reqText,
-			String rspText,String date) {
+			String rspText,String date,Long cost) {
 		super();
 		this.id=id;
 		this.url = url;
@@ -79,6 +95,7 @@ public class HttpRequest {
 		this.reqText = reqText;
 		this.rspText = rspText;
 		this.reqDate = date;
+		this.cost = cost;
 	}
 
 	public HttpRequest() {

@@ -15,9 +15,8 @@ public class HttpKeep {
 		// TODO Auto-generated constructor stub
 	}
 
-	public HttpKeep(Long id,String httpName, String httpUrl, String reqText) {
+	public HttpKeep(String httpName, String httpUrl, String reqText) {
 		super();
-		this.id=id;
 		this.httpName = httpName;
 		this.httpUrl = httpUrl;
 		this.reqText = reqText;
