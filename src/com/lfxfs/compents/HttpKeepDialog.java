@@ -108,6 +108,7 @@ public class HttpKeepDialog extends JDialog {
 		
 		final JTextArea textArea_reqText = new JTextArea();
 		textArea_reqText.setText(appView==null?"":appView.textArea_reqText.getText());
+		textArea_reqText.setLineWrap(true);
 		scrollPane.setViewportView(textArea_reqText);
 		contentPanel.setLayout(gl_contentPanel);
 		{
