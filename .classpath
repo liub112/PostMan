@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/angel-invoke-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/angel-invoke-1.4.jar" sourcepath="D:/.m2/repository/com/al/al-invoke/0.0.1-SNAPSHOT/al-invoke-0.0.1-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="lib/spring-core-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/sqlitejdbc-0.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/SwingSets3(BeautyEyeLNFDemo).jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>

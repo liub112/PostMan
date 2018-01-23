@@ -11,6 +11,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -44,6 +45,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
+
 import com.al.angel.invoke.http.HttpInvoke;
 import com.al.angel.invoke.http.HttpResponse;
 import com.lfxfs.compents.HistoryDialog;
@@ -61,10 +65,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.awt.event.ActionEvent;
+import javax.swing.JRadioButton;
 
 public class AppView extends JFrame {
 	private static final String ENCODING = "UTF-8";
-
+	private Boolean setTimeOut = true;
 	private JPanel contentPane;
 	public JTextField textField_url;
 	private final AppView frame;
@@ -83,6 +88,13 @@ public class AppView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					/**
+					 * http://www.52im.net/thread-26-1-1.html
+					 * 皮肤使用介绍网址
+					 */
+					BeautyEyeLNFHelper.frameBorderStyle =BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;
+					org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+					UIManager.put("RootPane.setupButtonVisible", false);
 					AppView frame = new AppView();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -114,14 +126,14 @@ public class AppView extends JFrame {
 		httpDao = new httpDao();
 		setTitle("POST-工具v2.0 --by lfxfs");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1087, 658);
+		setBounds(100, 100, 1087, 708);
 		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		this.setLocationRelativeTo(null);
-		InitGlobalFont(new Font("微软雅黑", Font.PLAIN, 12));
+//		InitGlobalFont(new Font("微软雅黑", Font.PLAIN, 12));
 		JLabel lblNewLabel_1 = new JLabel("请求地址");
 		lblNewLabel_1.setBounds(251, 26, 57, 23);
 		contentPane.add(lblNewLabel_1);
@@ -170,8 +182,9 @@ public class AppView extends JFrame {
 					String url = textField_url.getText().trim();
 					String reqText = textArea_reqText.getText().trim();
 					Date start = new Date();
+					int timeOut = setTimeOut == true?3600:Integer.MAX_VALUE;					
 					HttpResponse resp = HttpInvoke.sendRequest(url, null, reqText,
-							3600, ENCODING);
+							timeOut, ENCODING);
 					Long cost = new Date().getTime()-start.getTime();
 					String respText = resp.getContent().trim();
 					frame.textArea_rspText.setText(respText);
@@ -189,7 +202,7 @@ public class AppView extends JFrame {
 			
 			}
 		});
-		btnNewButton_1.setBounds(954, 26, 67, 23);
+		btnNewButton_1.setBounds(988, 26, 47, 23);
 		contentPane.add(btnNewButton_1);
 		JButton button = new JButton("收藏");
 		button.addActionListener(new ActionListener() {
@@ -201,10 +214,12 @@ public class AppView extends JFrame {
 //				frame.contentPane.add(httpKeepAdd);	
 				HttpKeepDialog httpKeepDialog = new HttpKeepDialog(frame,true);
 				httpKeepDialog.setVisible(true);
-				add(httpKeepDialog);
+				getContentPane().add(httpKeepDialog);
 			}
 		});
 		button.setBounds(562, 586, 93, 23);
+//		button.setBounds(984, 26, 47, 23);
+
 		contentPane.add(button);
 		
 		tree = getTree();
@@ -334,6 +349,37 @@ public class AppView extends JFrame {
 		scrollPane.setBounds(31, 32, 185, 577);
 		scrollPane.setViewportView(tree);
 		contentPane.add(scrollPane);
+		
+
+		
+		JLabel label = new JLabel("超时设置");
+		label.setBounds(31, 7, 54, 15);
+		contentPane.add(label);
+		ButtonGroup bottonGroup = new ButtonGroup();
+		JRadioButton radioButton_1 = new JRadioButton("启用");
+		radioButton_1.setBounds(90, 3, 72, 23);
+		radioButton_1.setSelected(true);
+		radioButton_1.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setTimeOut = true;
+				
+			}
+		});
+		bottonGroup.add(radioButton_1);
+		contentPane.add(radioButton_1);
+		
+		JRadioButton radioButton = new JRadioButton("关闭");
+		radioButton.setBounds(157, 3, 72, 23);
+		radioButton.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setTimeOut = false;
+				
+			}
+		});
+		bottonGroup.add(radioButton);
+		contentPane.add(radioButton);
 		// 添加选择事件
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 				@Override
