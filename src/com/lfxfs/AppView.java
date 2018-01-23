@@ -57,6 +57,9 @@ import javax.swing.JTree;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.awt.event.ActionEvent;
 
 public class AppView extends JFrame {
@@ -308,12 +311,21 @@ public class AppView extends JFrame {
 	 	popMenu.add(delItem);
 		tree.setCellEditor(new DefaultTreeCellEditor(tree,new DefaultTreeCellRenderer()));
 		DefaultTreeCellRenderer render=(DefaultTreeCellRenderer)(tree.getCellRenderer());
+		URL base = this.getClass().getResource("");
+		String path="";
+		try {
+			path = new File(base.getFile(), "../../").getCanonicalPath();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println(this.getClass().getResource("img/url.png"));
 		//叶节点的图标，也就是下面没有子结点的节点图标
-		Icon leafIcon=new ImageIcon("img/url.png");
+		Icon leafIcon=new ImageIcon(this.getClass().getResource("img/url.png"));
 		//非叶节点关闭时的图标，也就是下面有子结点的节点图标
-		Icon closedIcon=new ImageIcon("img/文件夹-收起.png");
+		Icon closedIcon=new ImageIcon(this.getClass().getResource("img/文件夹-收起.png"));
 		//非叶节点打开时的图标
-		Icon openedIcon=new ImageIcon("img/文件夹-展开.png");
+		Icon openedIcon=new ImageIcon(this.getClass().getResource("img/文件夹-展开.png"));
 		render.setLeafIcon(leafIcon);
 		render.setClosedIcon(closedIcon);
 		render.setOpenIcon(openedIcon);
