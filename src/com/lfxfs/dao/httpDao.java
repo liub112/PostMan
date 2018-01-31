@@ -120,6 +120,7 @@ public class httpDao {
 			createTableIfNotExist(conn);
 			PreparedStatement deletePrtm = conn.prepareStatement(delteSql);
 			deletePrtm.executeUpdate();
+			deletePrtm.close();;
 			PreparedStatement prtm = conn.prepareStatement(sql);
 			ResultSet rs = prtm.executeQuery();
 			while(rs.next()){
