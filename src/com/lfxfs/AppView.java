@@ -91,11 +91,14 @@ public class AppView extends JFrame {
 					 * http://www.52im.net/thread-26-1-1.html
 					 * 皮肤使用介绍网址
 					 */
+					Date startDate = new Date();
 					BeautyEyeLNFHelper.frameBorderStyle =BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;
 					org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
 					UIManager.put("RootPane.setupButtonVisible", false);
+					System.out.println("UI初始化耗时："+(new Date().getTime()- startDate.getTime()));
 					AppView frame = new AppView();
 					frame.setVisible(true);
+					System.out.println("初始化耗时："+(new Date().getTime()- startDate.getTime()));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -220,7 +223,7 @@ public class AppView extends JFrame {
 //		button.setBounds(984, 26, 47, 23);
 
 		contentPane.add(button);
-		
+        top = new DefaultMutableTreeNode("POST-工具");
 		tree = getTree();
 		tree.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		tree.setBounds(31, 32, 155, 577);
@@ -421,26 +424,36 @@ public class AppView extends JFrame {
 	  private  JTree getTree(){
 	        // 创建没有父节点和子节点、但允许有子节点的树节点，并使用指定的用户对象对它进行初始化。
 	        // public DefaultMutableTreeNode(Object userObject)
-	        DefaultMutableTreeNode node1 = new DefaultMutableTreeNode("收藏夹");
-	        List<HttpKeep> httpKeeps = httpDao.queryReqKeepInfo();
-	        if(httpKeeps!=null&&httpKeeps.size()>0){
-		        for (HttpKeep httpKeep : httpKeeps) {
-		        	node1.add(new DefaultMutableTreeNode(httpKeep));
-				}
-	        }
-
-	        DefaultMutableTreeNode node2 = new DefaultMutableTreeNode("调用历史");
-	        List<HttpRequest> httpRequests = httpDao.queryReqInfo();
-	        if(httpRequests!=null&&httpRequests.size()>0){
-		        for (HttpRequest httpRequest : httpRequests) {
-		        	node2.add(new DefaultMutableTreeNode(httpRequest));
-				}
-	        }
+	      
 	 
-	        top = new DefaultMutableTreeNode("POST-工具");	 
-	        top.add(node1);
-	        top.add(node2);
-	        final JTree tree = new JTree(top);		 
+
+	        final JTree tree = new JTree(top);		
+	        Thread td = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+//			        top = (DefaultMutableTreeNode) tree.getModel();
+			        DefaultMutableTreeNode node1 = new DefaultMutableTreeNode("收藏夹");
+			        List<HttpKeep> httpKeeps = httpDao.queryReqKeepInfo();
+			        if(httpKeeps!=null&&httpKeeps.size()>0){
+				        for (HttpKeep httpKeep : httpKeeps) {
+				        	node1.add(new DefaultMutableTreeNode(httpKeep));
+						}
+			        }
+
+			        DefaultMutableTreeNode node2 = new DefaultMutableTreeNode("调用历史");
+			        List<HttpRequest> httpRequests = httpDao.queryReqInfo();
+			        if(httpRequests!=null&&httpRequests.size()>0){
+				        for (HttpRequest httpRequest : httpRequests) {
+				        	node2.add(new DefaultMutableTreeNode(httpRequest));
+						}
+			        }
+			        top.add(node1);
+			        top.add(node2);
+			        dt.reload();
+				}
+			});
+	        td.start();
 	        // 添加选择事件
 	        tree.addTreeSelectionListener(new TreeSelectionListener() {	 
 
