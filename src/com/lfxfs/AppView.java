@@ -329,13 +329,6 @@ public class AppView extends JFrame {
 		tree.setCellEditor(new DefaultTreeCellEditor(tree,new DefaultTreeCellRenderer()));
 		DefaultTreeCellRenderer render=(DefaultTreeCellRenderer)(tree.getCellRenderer());
 		URL base = this.getClass().getResource("");
-		String path="";
-		try {
-			path = new File(base.getFile(), "../../").getCanonicalPath();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		System.out.println(this.getClass().getResource("img/url.png"));
 		//叶节点的图标，也就是下面没有子结点的节点图标
 		Icon leafIcon=new ImageIcon(this.getClass().getResource("img/url.png"));
