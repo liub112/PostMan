@@ -111,11 +111,15 @@ public class httpDao {
 	public List<HttpRequest> queryReqInfo() {
 		List<HttpRequest> lists = new ArrayList<HttpRequest>();
 		Connection conn = null;
-		String sql ="select * from (select * from http_request order by create_date desc) limit 0,200";
+		String  delteSql = "delete from http_request where id not in("
+				+ "select id from (select id from http_request order by create_date desc) limit 0,200)";
+		String sql ="select * from http_request order by create_date desc";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
 			conn = DbUtil.getConnection();
 			createTableIfNotExist(conn);
+			PreparedStatement deletePrtm = conn.prepareStatement(delteSql);
+			deletePrtm.executeUpdate();
 			PreparedStatement prtm = conn.prepareStatement(sql);
 			ResultSet rs = prtm.executeQuery();
 			while(rs.next()){
