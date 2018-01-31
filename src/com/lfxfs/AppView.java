@@ -432,25 +432,7 @@ public class AppView extends JFrame {
 				
 				@Override
 				public void run() {
-//			        top = (DefaultMutableTreeNode) tree.getModel();
-			        DefaultMutableTreeNode node1 = new DefaultMutableTreeNode("收藏夹");
-			        List<HttpKeep> httpKeeps = httpDao.queryReqKeepInfo();
-			        if(httpKeeps!=null&&httpKeeps.size()>0){
-				        for (HttpKeep httpKeep : httpKeeps) {
-				        	node1.add(new DefaultMutableTreeNode(httpKeep));
-						}
-			        }
-
-			        DefaultMutableTreeNode node2 = new DefaultMutableTreeNode("调用历史");
-			        List<HttpRequest> httpRequests = httpDao.queryReqInfo();
-			        if(httpRequests!=null&&httpRequests.size()>0){
-				        for (HttpRequest httpRequest : httpRequests) {
-				        	node2.add(new DefaultMutableTreeNode(httpRequest));
-						}
-			        }
-			        top.add(node1);
-			        top.add(node2);
-			        dt.reload();
+					updateTree(tree);
 				}
 			});
 	        td.start();
