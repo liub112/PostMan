@@ -111,7 +111,7 @@ public class httpDao {
 	public List<HttpRequest> queryReqInfo() {
 		List<HttpRequest> lists = new ArrayList<HttpRequest>();
 		Connection conn = null;
-		String sql ="select * from http_request order by create_date desc";
+		String sql ="select * from (select * from http_request order by create_date desc) limit 0,200";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
 			conn = DbUtil.getConnection();
